@@ -1,0 +1,16 @@
+INSERT INTO `bread_types` (bread_name,_id) VALUES ('White',1);
+INSERT INTO `bread_types` (bread_name,_id) VALUES ('Rapid White',2);
+INSERT INTO `bread_types` (bread_name,_id) VALUES ('Whole Wheat',3);
+INSERT INTO `bread_types` (bread_name,_id) VALUES ('Rapid Whole Wheat',4);
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Light1',1,'White');
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Medium1',2,'White');
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Dark1',3,'White');
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Light2',4,'Rapid White');
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Medium2',5,'Rapid White');
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Dark2',6,'Rapid White');
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Light3',7,'Whole Wheat');
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Medium3',8,'Whole Wheat');
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Dark3',9,'Whole Wheat');
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Light4',10,'Rapid Whole Wheat');
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Medium4',11,'Rapid Whole Wheat');
+INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Dark4',12,'Rapid Whole Wheat');
