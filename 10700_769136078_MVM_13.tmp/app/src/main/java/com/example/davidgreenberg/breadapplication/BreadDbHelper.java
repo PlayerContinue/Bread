@@ -11,13 +11,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 /**
  * Created by David Greenberg on 6/8/2017.
  */
 
-public class BreadDbHelper extends SQLiteOpenHelper{
+public class BreadDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
@@ -28,6 +29,7 @@ public class BreadDbHelper extends SQLiteOpenHelper{
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.CurrentContext = context;
     }
+
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(BreadEaterContract.BreadType.SQL_CREATE_ENTRY);
         db.execSQL(BreadEaterContract.BreadCrust.SQL_CREATE_ENTRY);
@@ -35,12 +37,13 @@ public class BreadDbHelper extends SQLiteOpenHelper{
         try {
             BreadDbHelper.CreateInsertFromFile(this.CurrentContext, BreadEaterContract.BREAD_TYPE_SQL, db);
             int i = 0;
-        }catch (IOException e) {
+        } catch (IOException e) {
             Toast.makeText(this.CurrentContext, e.toString(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
     }
+
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
@@ -49,19 +52,21 @@ public class BreadDbHelper extends SQLiteOpenHelper{
         db.execSQL(BreadEaterContract.BreadTimes.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
+
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 
     /**
      * Insert data from a file on creation of the asset
-     * @param context The context of the current instance containing the files
+     *
+     * @param context    The context of the current instance containing the files
      * @param resourceId The id of the file to be utilized
-     * @param db The database to which the value is meant to be added
+     * @param db         The database to which the value is meant to be added
      * @return
      * @throws IOException
      */
-    private static int CreateInsertFromFile(Context context, int resourceId,SQLiteDatabase db) throws IOException {
+    private static int CreateInsertFromFile(Context context, int resourceId, SQLiteDatabase db) throws IOException {
         // Reseting Counter
         int result = 0;
 
@@ -82,32 +87,34 @@ public class BreadDbHelper extends SQLiteOpenHelper{
     }
 }
 
-class ModifyDatabase{
+class ModifyDatabase {
 
     SQLiteDatabase db;
 
-    public ModifyDatabase(SQLiteOpenHelper helper){
+    public ModifyDatabase(SQLiteOpenHelper helper) {
         db = helper.getWritableDatabase();
     }
 
     /**
      * Insert values into the database
+     *
      * @param bread_name - The name of the bread
      * @param bread_time - The time the bread takes to make
      * @return long - Id of the new row
      */
-    public long addBread(String bread_name,String bread_time){
+    public long addBread(String bread_name, String bread_time) {
 
         ContentValues _values = new ContentValues();
 
-        _values.put(BreadEaterContract.BreadType.COLUMN_NAME_BREAD,bread_name);
+        _values.put(BreadEaterContract.BreadType.COLUMN_NAME_BREAD, bread_name);
         //_values.put(BreadEaterContract.BreadType.COLUMN_NAME_TIME,bread_time);
 
-        return this.db.insert(BreadEaterContract.BreadType.TABLE_NAME,null,_values);
+        return this.db.insert(BreadEaterContract.BreadType.TABLE_NAME, null, _values);
     }
 
     /**
      * Run through a file and insert the data into the database
+     *
      * @param context
      * @param resourceId
      * @return Number of inserted Rows
@@ -134,44 +141,40 @@ class ModifyDatabase{
     }
 
 
-
-
-
 }
 
 /**
  * TODO Add functinality to select the required table by the name of the spinner
  */
-class ReadBreadDatabase{
+class ReadBreadDatabase {
     SQLiteDatabase db;
 
-    public ReadBreadDatabase(SQLiteOpenHelper helper){
+    public ReadBreadDatabase(SQLiteOpenHelper helper) {
         this.db = helper.getReadableDatabase();
     }
 
-    public Cursor GetBreadList(){
+    public Cursor GetBreadList() {
 
-        return db.rawQuery("SELECT * FROM " + BreadEaterContract.BreadType.TABLE_NAME,null);
+        return db.rawQuery("SELECT * FROM " + BreadEaterContract.BreadType.TABLE_NAME, null);
 
 
     }
 
-    public Cursor GetDataBaseValues(String selectValues, DatabaseSpinner spinner){
+    public Cursor GetDataBaseValues(String selectValues, DatabaseSpinner spinner) {
+        String[] projection;
+        String tableName;
+        String selectionValue;
 
+        try {
 
-        try{
-            String[] projection;
-            String tableName;
-            String selectionValue;
             Class<?> test = Utility.getClassByName(spinner.getTag().toString());
-            Class<?>[] test1 =  test.getDeclaredClasses();
 
+            BaseTables _test = (BaseTables) test.newInstance();
+            selectionValue = _test.getSelection();
+            projection = _test.getProjection();
+            tableName = _test.getTableName();
 
-
-
-
-        return null;
-        /*String selection = selectionValue + "=?";
+        String selection = selectionValue + "=?";
         String[] selectionArgs = {selectValues};
 
         return db.query(
@@ -183,31 +186,32 @@ class ReadBreadDatabase{
                 null,
                 null);
 
-*/
-        }catch(Exception e){
-            return null;
+        } catch (ClassNotFoundException e) {
+            System.out.println(e.toString());
+        } catch (InstantiationException e) {
+            System.out.println(e.toString());
+        } catch (IllegalAccessException e) {
+            System.out.println(e.toString());
         }
+        return null;
     }
 
-    public Cursor GetDataBaseValues(String selectValues,String spinnerName){
+    public Cursor GetDataBaseValues(String selectValues, String spinnerName) {
         String[] projection;
         String tableName;
-        if(spinnerName.compareTo(SpinnerValues.BREAD_CRUST_SPINNER)==0){
+        if (spinnerName.compareTo(SpinnerValues.BREAD_CRUST_SPINNER) == 0) {
             projection = new String[]{
                     BreadEaterContract.BreadCrust._ID,
                     BreadEaterContract.BreadCrust.COLUMN_NAME_CRUST_TYPE
             };
             tableName = BreadEaterContract.BreadCrust.TABLE_NAME;
-        }else{
+        } else {
             projection = new String[]{
                     BreadEaterContract.BreadCrust._ID,
                     BreadEaterContract.BreadCrust.COLUMN_NAME_CRUST_TYPE
             };
             tableName = BreadEaterContract.BreadCrust.TABLE_NAME;
         }
-
-
-
 
 
         String selection = BreadEaterContract.BreadCrust.COLUMN_NAME_BREAD_NAME_ID + "=?";

@@ -2,6 +2,7 @@ INSERT INTO `bread_types` (bread_name,_id) VALUES ('White',1);
 INSERT INTO `bread_types` (bread_name,_id) VALUES ('Rapid White',2);
 INSERT INTO `bread_types` (bread_name,_id) VALUES ('Whole Wheat',3);
 INSERT INTO `bread_types` (bread_name,_id) VALUES ('Rapid Whole Wheat',4);
+INSERT INTO `bread_times` (_id,bread_id,crust_id,cycle,size,preheat_time,knead_1,knead_2,rise_1,knead_3,rise_2,knead_4,rise_3) VALUES (1,'White','Light','0','0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Light1',1,'White');
 INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Medium1',2,'White');
 INSERT INTO `bread_crust` (crust_type,_id,bread_name_id) VALUES ('Dark1',3,'White');

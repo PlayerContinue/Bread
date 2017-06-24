@@ -2,6 +2,9 @@ package com.example.davidgreenberg.breadapplication;
 
 import android.provider.BaseColumns;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by David Greenberg on 6/22/2017.
  */
@@ -9,18 +12,31 @@ import android.provider.BaseColumns;
 public final class BreadEaterContract{
     //File containing default values for database
     public static final int BREAD_TYPE_SQL = R.raw.bread_types_sql;
-    private BreadEaterContract(){};
+    private BreadEaterContract(){
+    };
 
     public static class BreadType extends BaseTables implements BaseColumns {
         public static final String TABLE_NAME = "bread_types";
-        public String SELECTION;
-        public String[] PROJECTION;
+
         public static final String COLUMN_NAME_BREAD = "bread_name";
         public static final String SQL_CREATE_ENTRY = "CREATE TABLE IF NOT EXISTS " + BreadType.TABLE_NAME + " (" +
                 BreadType._ID + " INTEGER PRIMARY KEY," +
                 BreadType.COLUMN_NAME_BREAD + " INTEGER NOT NULL)";
 
         public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS" + BreadType.TABLE_NAME;
+
+        public static String SELECTION = BreadEaterContract.BreadCrust.COLUMN_NAME_BREAD_NAME_ID;
+        public static String[] PROJECTION = new String[]{BreadEaterContract.BreadCrust.COLUMN_NAME_BREAD_NAME_ID + "," + BreadEaterContract.BreadCrust.COLUMN_NAME_CRUST_TYPE};
+
+        public String getSelection(){
+            return BreadEaterContract.BreadType.SELECTION;
+        }
+        public String[] getProjection(){
+            return BreadEaterContract.BreadType.PROJECTION;
+        }
+        public String getTableName(){
+            return BreadEaterContract.BreadType.TABLE_NAME;
+        }
 
     }
 
@@ -31,18 +47,30 @@ public final class BreadEaterContract{
         public static final String TABLE_NAME = "bread_crust";
         public static final String COLUMN_NAME_CRUST_TYPE = "crust_type";
         public static final String COLUMN_NAME_BREAD_NAME_ID = "bread_name_id";
-        public static final String SELECTION = COLUMN_NAME_BREAD_NAME_ID;
-        public static final String[] PROJECTION = new String[]{COLUMN_NAME_BREAD_NAME_ID,COLUMN_NAME_CRUST_TYPE};
+        public static String SELECTION = BreadEaterContract.BreadCrust.COLUMN_NAME_BREAD_NAME_ID;
+        public static String[] PROJECTION = new String[]{BreadEaterContract.BreadCrust.COLUMN_NAME_BREAD_NAME_ID + "," + BreadEaterContract.BreadCrust.COLUMN_NAME_CRUST_TYPE};
+
         public static final String SQL_CREATE_ENTRY = "CREATE TABLE IF NOT EXISTS " + BreadCrust.TABLE_NAME + " (" +
                 BreadCrust._ID + " INTEGER PRIMARY KEY," +
                 BreadCrust.COLUMN_NAME_CRUST_TYPE + " TEXT," +
                 BreadCrust.COLUMN_NAME_BREAD_NAME_ID + " TEXT)";
 
         public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS" + BreadCrust.TABLE_NAME;
+        public String getSelection(){
+            return BreadEaterContract.BreadCrust.SELECTION;
+        }
+        public String[] getProjection(){
+            return BreadEaterContract.BreadCrust.PROJECTION;
+        }
+        public String getTableName(){
+            return BreadEaterContract.BreadCrust.TABLE_NAME;
+        }
     }
 
     public static class BreadTimes extends BaseTables implements BaseColumns {
         public static final String TABLE_NAME = "bread_times";
+        public static String SELECTION = BreadEaterContract.BreadCrust.COLUMN_NAME_BREAD_NAME_ID;
+        public static String[] PROJECTION = new String[]{BreadEaterContract.BreadCrust.COLUMN_NAME_BREAD_NAME_ID + "," + BreadEaterContract.BreadCrust.COLUMN_NAME_CRUST_TYPE};
         public static final String SQL_CREATE_ENTRY = String.format("CREATE TABLE IF NOT EXISTS %s ( " +
                         "%s INTEGER PRIMARY KEY, " +
                         "%s TEXT," +
@@ -87,16 +115,24 @@ public final class BreadEaterContract{
         public static final String COLUMN_NAME_BAKE = "bake";
         public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS" + BreadTimes.TABLE_NAME;
 
+        public String getSelection(){
+            return BreadEaterContract.BreadTimes.SELECTION;
+        }
+        public String[] getProjection(){
+            return BreadEaterContract.BreadTimes.PROJECTION;
+        }
+        public String getTableName(){
+            return BreadEaterContract.BreadTimes.TABLE_NAME;
+        }
     }
-
 
 }
 
+
+
 abstract class BaseTables {
-    public String TABLE_NAME;
-    public String SELECTION;
-    public String[] PROJECTION;
-    public BaseTables getInstance(){
-        return this;
-    };
+
+    public abstract String getSelection();
+    public abstract String[] getProjection();
+    public abstract String getTableName();
 }
